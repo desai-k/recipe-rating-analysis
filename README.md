@@ -22,6 +22,8 @@ This question is important because sugar is often associated with taste and enjo
 
 ---
 
+
+
 ## Data Cleaning and Exploratory Data Analysis
 Before conducting analysis, the dataset required several preprocessing steps to ensure accuracy and usability. These steps were designed with the data generating process in mind and to ensure that the variables used in analysis meaningfully reflect user behavior and recipe characteristics.
 
@@ -146,6 +148,8 @@ The scatter plot illustrates the relationship between sugar content and average 
 The average ratings across sugar content categories are nearly identical.
 This suggests that sugar content does not strongly influence how users rate recipes.
 
+
+
 ## Assessment of Missingness
 ### Missing Not at Random (MNAR) Analysis
 
@@ -201,6 +205,8 @@ The missingness of the `description` column exhibits mixed behavior:
 
 This suggests that while some aspects of missingness may be explained by observed variables, unobserved factors still play an important role.
 
+
+
 ## Hypothesis Testing
 ### Hypotheses
 
@@ -251,6 +257,8 @@ Although sugar is often associated with taste preference, this analysis does not
 
 This suggests that other factors—such as preparation method, ingredients, or cuisine type—may play a more important role in determining recipe ratings.
 
+
+
 ## Framing a Prediction Problem
 ### Prediction Problem
 
@@ -300,6 +308,8 @@ In addition, **R² (coefficient of determination)** is reported as a secondary m
 - **Evaluation Metrics:** RMSE (primary), R² (secondary)  
 - **Data Leakage Avoidance:** Only pre-rating features are used  
 
+
+
 ## Baseline Model
 ### Model Description
 
@@ -347,6 +357,8 @@ The baseline model performs poorly as a predictor of recipe ratings. The selecte
 While the model generalizes well, its lack of explanatory power suggests that more informative features are needed. Recipe ratings are likely influenced by more complex factors such as ingredients, nutritional content, or user preferences.
 
 This baseline model serves as a reference point for evaluating improvements in more advanced models.
+
+
 
 ## Final Model
 ### Feature Engineering
@@ -417,9 +429,9 @@ Despite this improvement, overall model performance remains modest. The very low
 
 Overall, the final model demonstrates a measurable but limited improvement over the baseline, highlighting both the value of feature engineering and the limitations of the available data.
 
-## Fairness Analysis
-## Step 8: Fairness Analysis
 
+
+## Fairness Analysis
 ### Groups and Evaluation Metric
 
 The fairness of the final model is evaluated by comparing performance across groups defined by recipe calorie content:
