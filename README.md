@@ -90,7 +90,7 @@ After cleaning, the dataset contains structured numerical features and a reliabl
 #### Plot 1: Distribution of Ratings
 <iframe
   src="assets/plot1.html"
-  width="800"
+  width="600"
   height="600"
   frameborder="0"
 ></iframe>
@@ -104,7 +104,7 @@ Overall, this pattern indicates a strong positive bias in ratings, where most re
 #### Plot 2: Distribution of Sugar Content
 <iframe
   src="assets/plot2.html"
-  width="800"
+  width="600"
   height="600"
   frameborder="0"
 ></iframe>
@@ -117,7 +117,7 @@ This suggests that higher sugar ratings are less common but may still represent 
 #### Plot 3: Sugar vs Rating
 <iframe
   src="assets/plot3.html"
-  width="800"
+  width="600"
   height="600"
   frameborder="0"
 ></iframe>
@@ -127,7 +127,7 @@ The boxplot illustrates how average recipe ratings are distributed across differ
 #### Plot 4: Preparation Time vs Rating
 <iframe
   src="assets/plot4.html"
-  width="800"
+  width="600"
   height="600"
   frameborder="0"
 ></iframe>
@@ -238,7 +238,7 @@ Therefore, the null hypothesis is **not rejected**.
 
 ### Visualization
 
-<iframe src="assets/plot5.html" width="100%" height="400" frameborder="0"></iframe>
+<iframe src="assets/plot7.html" width="100%" height="400" frameborder="0"></iframe>
 
 ---
 
@@ -251,6 +251,53 @@ Although sugar is often associated with taste preference, this analysis does not
 This suggests that other factors—such as preparation method, ingredients, or cuisine type—may play a more important role in determining recipe ratings.
 
 ## Framing a Prediction Problem
+### Prediction Problem
+
+The goal is to predict the **average rating (`avg_rating`)** of a recipe based on its characteristics.
+
+This is a **regression problem**, since the response variable is continuous and takes values between 1 and 5.
+
+---
+
+### Response Variable
+
+- **`avg_rating`**: the average user rating of a recipe  
+
+This variable is chosen because it reflects overall user satisfaction and is commonly used by recipe platforms to rank and recommend recipes.
+
+---
+
+### Features and Time of Prediction
+
+At the time of prediction, only information available when a recipe is created is used. Variables that depend on future user interaction (such as ratings themselves) are excluded to prevent data leakage.
+
+The features used include:
+- preparation time (`minutes`)  
+- number of ingredients (`n_ingredients`)  
+- nutritional information (e.g., `calories`, `sugar`, `protein`, `carbs`, `total_fat`)  
+
+These features are available prior to any user ratings and capture aspects of recipe complexity and nutritional content that may influence user preferences.
+
+---
+
+### Evaluation Metric
+
+Model performance is evaluated using **Root Mean Squared Error (RMSE)**.
+
+RMSE is appropriate because:
+- the response variable is continuous  
+- it penalizes larger errors more heavily, making it sensitive to poor predictions  
+
+In addition, **R² (coefficient of determination)** is reported as a secondary metric to measure how well the model explains variability in recipe ratings.
+
+---
+
+### Summary
+- **Problem Type:** Regression  
+- **Response Variable:** `avg_rating`  
+- **Features:** Recipe characteristics available at creation time  
+- **Evaluation Metrics:** RMSE (primary), R² (secondary)  
+- **Data Leakage Avoidance:** Only pre-rating features are used  
 
 ## Baseline Model
 
