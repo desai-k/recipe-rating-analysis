@@ -1,7 +1,5 @@
 # recipe-rating-analysis
 
-# Your Creative Title
-
 ## Introduction
 
 ## Data Cleaning and Exploratory Data Analysis
