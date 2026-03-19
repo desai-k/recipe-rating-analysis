@@ -148,6 +148,8 @@ The scatter plot illustrates the relationship between sugar content and average 
 The average ratings across sugar content categories are nearly identical.
 This suggests that sugar content does not strongly influence how users rate recipes.
 
+---
+
 
 
 ## Assessment of Missingness
@@ -205,6 +207,8 @@ The missingness of the `description` column exhibits mixed behavior:
 
 This suggests that while some aspects of missingness may be explained by observed variables, unobserved factors still play an important role.
 
+---
+
 
 
 ## Hypothesis Testing
@@ -257,6 +261,8 @@ Although sugar is often associated with taste preference, this analysis does not
 
 This suggests that other factors—such as preparation method, ingredients, or cuisine type—may play a more important role in determining recipe ratings.
 
+---
+
 
 
 ## Framing a Prediction Problem
@@ -308,6 +314,8 @@ In addition, **R² (coefficient of determination)** is reported as a secondary m
 - **Evaluation Metrics:** RMSE (primary), R² (secondary)  
 - **Data Leakage Avoidance:** Only pre-rating features are used  
 
+---
+
 
 
 ## Baseline Model
@@ -357,6 +365,8 @@ The baseline model performs poorly as a predictor of recipe ratings. The selecte
 While the model generalizes well, its lack of explanatory power suggests that more informative features are needed. Recipe ratings are likely influenced by more complex factors such as ingredients, nutritional content, or user preferences.
 
 This baseline model serves as a reference point for evaluating improvements in more advanced models.
+
+---
 
 
 
@@ -428,6 +438,8 @@ The added features (`log_minutes` and `calories_per_ingredient`) provide additio
 Despite this improvement, overall model performance remains modest. The very low R² suggests that most of the variation in recipe ratings is not explained by the available features. This is likely due to missing factors such as individual taste preferences, cooking quality, or presentation, which are not captured in the dataset.
 
 Overall, the final model demonstrates a measurable but limited improvement over the baseline, highlighting both the value of feature engineering and the limitations of the available data.
+
+---
 
 
 
