@@ -1,11 +1,6 @@
 # recipe-rating-analysis
 
 ## Introduction
-Here’s a polished version you can drop straight into your website’s **Introduction** section:
-
----
-
-## Introduction
 Food plays an important role in daily life, and understanding what makes a recipe appealing can help users make better cooking decisions. In this project, I analyze a large dataset of online recipes and user ratings to investigate how nutritional characteristics influence user preferences.
 
 The dataset is composed of two sources: a recipes dataset containing 83,782 recipes and an interactions dataset containing 731,927 user ratings. After combining and cleaning these datasets, the resulting dataset used for this analysis contains **83,782 recipes**, each with aggregated rating information.
