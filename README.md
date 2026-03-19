@@ -301,7 +301,167 @@ In addition, **R² (coefficient of determination)** is reported as a secondary m
 - **Data Leakage Avoidance:** Only pre-rating features are used  
 
 ## Baseline Model
+### Model Description
+
+A **linear regression model** is used as the baseline model to predict recipe ratings. The model is implemented using a single **scikit-learn Pipeline**, which includes both preprocessing and model training steps to ensure a clean and reproducible workflow.
+
+---
+
+### Features
+
+The model incorporates the following features:
+
+- **`minutes`** — quantitative: preparation time  
+- **`n_ingredients`** — quantitative: number of ingredients  
+
+Both features are numeric and used directly in the model.
+
+---
+
+### Encoding and Preprocessing
+
+Since both features are quantitative, no categorical encoding is required.
+
+However, both features are standardized using a **StandardScaler** to place them on comparable scales before fitting the model.
+
+---
+
+### Model Performance
+
+The model is evaluated using **RMSE** and **R²** on both training and test data:
+
+- **Training RMSE:** 0.639  
+- **Test RMSE:** 0.630  
+- **Training R²:** 0.0004  
+- **Test R²:** -0.0002  
+
+The training and test RMSE values are very similar, indicating that the model generalizes well to unseen data and is not overfitting.
+
+However, the R² values are very close to zero (and slightly negative on the test set), indicating that the model explains almost none of the variability in recipe ratings.
+
+---
+
+### Conclusion
+The baseline model performs poorly as a predictor of recipe ratings. The selected features (`minutes` and `n_ingredients`) do not provide meaningful predictive power for the response variable.
+
+While the model generalizes well, its lack of explanatory power suggests that more informative features are needed. Recipe ratings are likely influenced by more complex factors such as ingredients, nutritional content, or user preferences.
+
+This baseline model serves as a reference point for evaluating improvements in more advanced models.
 
 ## Final Model
+### Feature Engineering
+To improve upon the baseline model, additional features were engineered to better capture meaningful aspects of the data:
+
+- **`log_minutes`** (quantitative): a log-transformed version of preparation time. This transformation reduces skewness in cooking times and allows the model to better distinguish between relatively short and long recipes.  
+- **`calories_per_ingredient`** (quantitative): calculated as `calories / n_ingredients`. This feature represents the density or richness of a recipe, which may better reflect how heavy or indulgent a recipe is compared to total calories alone.  
+
+In addition to the baseline features (`minutes`, `n_ingredients`), the model also includes:
+
+- **`calories`** (quantitative)  
+- **`sugar`** (quantitative)  
+- **`protein`** (quantitative)  
+- **`carbs`** (quantitative)  
+
+These features were included because nutritional content may directly influence taste and user satisfaction, which are likely drivers of recipe ratings.
+
+---
+
+### Model and Hyperparameter Selection
+
+A **Random Forest Regressor** was chosen as the final model because it can capture **nonlinear relationships** and interactions between features, which a linear model cannot.
+
+The following hyperparameters were tuned using **GridSearchCV**:
+
+- **`n_estimators`**: number of trees in the forest  
+- **`max_depth`**: maximum depth of each tree  
+
+These hyperparameters were selected to control model complexity and reduce overfitting while maintaining predictive power.
+
+The best-performing hyperparameters were:
+
+- **`n_estimators = 100`**  
+- **`max_depth = 5`**
+
+Model selection and hyperparameter tuning were performed using 3-fold cross-validation on the training data, optimizing for **RMSE**.
+
+---
+
+### Model Performance
+
+The final model was evaluated on both training and test data:
+
+- **Training RMSE:** (computed in notebook)  
+- **Test RMSE:** 0.62977  
+- **Training R²:** (computed in notebook)  
+- **Test R²:** 0.00043  
+
+---
+
+### Comparison to Baseline Model
+
+Compared to the baseline linear regression model:
+
+- Test RMSE decreased from **0.62997 → 0.62977**  
+- Test R² increased from **−0.00019 → 0.00043**  
+
+This indicates a small improvement in predictive performance.
+
+---
+
+### Conclusion
+The final model improves upon the baseline by incorporating engineered features and using a more flexible algorithm capable of modeling nonlinear relationships.
+
+The added features (`log_minutes` and `calories_per_ingredient`) provide additional information about recipe complexity and nutritional density, which are relevant to how users may perceive and rate recipes.
+
+Despite this improvement, overall model performance remains modest. The very low R² suggests that most of the variation in recipe ratings is not explained by the available features. This is likely due to missing factors such as individual taste preferences, cooking quality, or presentation, which are not captured in the dataset.
+
+Overall, the final model demonstrates a measurable but limited improvement over the baseline, highlighting both the value of feature engineering and the limitations of the available data.
 
 ## Fairness Analysis
+## Step 8: Fairness Analysis
+
+### Groups and Evaluation Metric
+
+The fairness of the final model is evaluated by comparing performance across groups defined by recipe calorie content:
+
+- **Group X:** Low-calorie recipes (below median calories)  
+- **Group Y:** High-calorie recipes (above median calories)  
+
+The evaluation metric used is **Root Mean Squared Error (RMSE)**, which is appropriate for this regression task.
+
+---
+
+### Hypotheses
+
+- **Null Hypothesis (H₀):** The model is fair. The RMSE for low-calorie and high-calorie recipes is the same, and any observed difference is due to random chance.  
+- **Alternative Hypothesis (H₁):** The model is unfair. The RMSE differs between low-calorie and high-calorie recipes.  
+
+---
+
+### Test Statistic and Significance Level
+
+The test statistic is the **difference in RMSE** between the two groups (Group X − Group Y).
+
+A significance level of **α = 0.05** is used.
+
+---
+
+### Results
+
+A permutation test with 1000 simulations yields a p-value of approximately **0.907**.
+
+Since this p-value is much greater than 0.05, the null hypothesis is not rejected.
+
+---
+
+### Visualization
+
+<iframe src="assets/plot8.html" width="100%" height="400" frameborder="0"></iframe>
+
+---
+
+### Conclusion
+
+There is no statistically significant evidence that the model performs differently between low-calorie and high-calorie recipes. The difference in RMSE between the two groups is very small and consistent with random variation.
+
+This suggests that the model is **fair with respect to calorie-based groupings**, although fairness across other potential groupings may still require further investigation.
