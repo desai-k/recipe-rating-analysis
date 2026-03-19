@@ -23,38 +23,69 @@ This question is important because sugar is often associated with taste and enjo
 ---
 
 ## Data Cleaning and Exploratory Data Analysis
-Before conducting analysis, the dataset required several preprocessing steps to ensure accuracy and usability. These steps were designed to reflect the way the data was generated and to prepare it for meaningful analysis.
+Before conducting analysis, the dataset required several preprocessing steps to ensure accuracy and usability. These steps were designed with the data generating process in mind and to ensure that the variables used in analysis meaningfully reflect user behavior and recipe characteristics.
 
 ### 1. Merging Datasets
-The recipes dataset was merged with the interactions dataset to incorporate user ratings. Since each recipe can receive multiple ratings from different users, we aggregated ratings at the recipe level to ensure each recipe has a single representative value.
 
-### 2. Handling Missing Ratings
-Ratings of `0` were treated as missing values and replaced with `NaN`, since a rating of zero does not represent a valid user score but instead indicates missing or invalid data.
+The recipes dataset was merged with the interactions dataset to incorporate user ratings. Since each recipe can receive multiple ratings from different users, we aggregated ratings at the recipe level so that each recipe is represented by a single observation. This aligns with the data generating process, where multiple independent users contribute ratings for the same recipe.
 
-### 3. Creating Average Rating
-We computed the average rating (`avg_rating`) for each recipe by grouping ratings by recipe ID. This provides a single response variable that summarizes overall user preference for each recipe.
-
-### 4. Expanding Nutritional Information
-The `nutrition` column originally contained lists stored as strings. These were converted into separate numerical columns:
-- calories  
-- total fat  
-- sugar  
-- sodium  
-- protein  
-- saturated fat  
-- carbohydrates  
-
-This transformation allows nutritional features to be analyzed individually and used in modeling.
-
-### 5. Handling Outliers
-Recipes with preparation times greater than 300 minutes were removed to reduce the influence of extreme values, which may represent errors or atypical recipes.
-
-### 6. Creating Sugar Categories
-To better analyze how sugar content relates to ratings, we created a new categorical variable `sugar_bin` by dividing sugar into quartiles (Low, Medium-Low, Medium-High, High). This allows for easier comparison across groups.
+**Impact:** This allowed us to analyze relationships at the recipe level (e.g., sugar vs. average rating) rather than at the individual rating level.
 
 ---
 
-After cleaning, the dataset contains structured numerical features and a reliable average rating for each recipe, making it suitable for exploratory data analysis and modeling.
+### 2. Handling Missing Ratings
+
+Ratings of `0` were treated as missing values and replaced with `NaN`, since a rating of zero does not represent a valid user score but instead indicates missing or invalid data.
+
+**Impact:** This prevents artificially lowering average ratings and ensures that computed averages reflect only valid user opinions.
+
+---
+
+### 3. Creating Average Rating
+
+We computed the average rating (`avg_rating`) for each recipe by grouping ratings by recipe ID. This provides a single response variable that summarizes overall user preference.
+
+**Impact:** This transformation creates a stable and interpretable target variable for both exploratory analysis and predictive modeling.
+
+---
+
+### 4. Expanding Nutritional Information
+
+The `nutrition` column originally contained lists stored as strings. These were parsed and converted into separate numerical columns:
+
+* calories
+* total fat
+* sugar
+* sodium
+* protein
+* saturated fat
+* carbohydrates
+
+This step makes the data usable for quantitative analysis and reflects how nutritional information is inherently structured.
+
+**Impact:** This allows us to isolate sugar as a variable of interest and directly analyze its relationship with ratings.
+
+---
+
+### 5. Handling Outliers
+
+Recipes with preparation times greater than 300 minutes were removed, as these likely represent extreme or atypical cases that do not reflect typical user behavior.
+
+**Impact:** This reduces the influence of outliers that could distort distributions and relationships in exploratory analysis.
+
+---
+
+### 6. Creating Sugar Categories
+
+To better analyze how sugar content relates to ratings, we created a categorical variable `sugar_bin` by dividing sugar values into quartiles (Low, Medium-Low, Medium-High, High).
+
+**Impact:** This enables clearer comparisons across groups and supports aggregation and visualization in later analysis.
+
+---
+
+### Summary
+After cleaning, the dataset contains structured numerical features and a reliable average rating for each recipe. These steps ensure that the dataset accurately reflects both the nutritional properties of recipes and user-generated ratings, making it suitable for exploratory data analysis and modeling.
+
 
 
 
