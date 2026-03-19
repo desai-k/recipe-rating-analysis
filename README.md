@@ -135,12 +135,13 @@ The boxplot illustrates how average recipe ratings are distributed across differ
 The scatter plot illustrates the relationship between sugar content and average recipe rating. The points are widely dispersed across the chart, and although there is a slight upward tendency, it is very minimal. This suggests a **weak positive relationship**, meaning recipes with more sugar might receive slightly higher ratings on average. However, because the points are not tightly clustered around a clear line, the association is **not strong or consistent**, indicating that sugar content is not a major factor influencing recipe ratings.
 
 ### Aggregation Table
-             mean  count
-sugar_bin               
-Low          4.63  19827
-Medium-Low   4.63  18269
-Medium-High  4.62  18705
-High         4.63  18646
+
+| sugar_bin   | mean | count |
+|------------|------|-------|
+| Low        | 4.63 | 19827 |
+| Medium-Low | 4.63 | 18269 |
+| Medium-High| 4.62 | 18705 |
+| High       | 4.63 | 18646 |
 
 The average ratings across sugar content categories are nearly identical.
 This suggests that sugar content does not strongly influence how users rate recipes.
