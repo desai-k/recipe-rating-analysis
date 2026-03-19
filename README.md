@@ -86,13 +86,169 @@ To better analyze how sugar content relates to ratings, we created a categorical
 ### Summary
 After cleaning, the dataset contains structured numerical features and a reliable average rating for each recipe. These steps ensure that the dataset accurately reflects both the nutritional properties of recipes and user-generated ratings, making it suitable for exploratory data analysis and modeling.
 
+### Univariate Analysis
+#### Plot 1: Distribution of Ratings
+<iframe
+  src="assets/plot1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
+The histogram shows the distribution of average recipe ratings, with the percentage of recipes on the y-axis and rating values on the x-axis. The distribution is heavily skewed toward higher ratings, with a large concentration of recipes clustered between 4.5 and 5.0. In particular, ratings near 5.0 make up the largest share, indicating that most recipes receive very positive feedback.
 
+Lower ratings (below 3.5) are relatively rare, appearing only as small percentages across a few bins. There are also very few extremely low ratings (around 1–2), suggesting that poorly rated recipes are uncommon in the dataset.
+
+Overall, this pattern indicates a strong positive bias in ratings, where most recipes are rated highly. This could reflect genuinely good recipe quality, user rating tendencies (e.g., people are more likely to rate recipes they like), or platform bias toward higher scores.
+
+#### Plot 2: Distribution of Sugar Content
+<iframe
+  src="assets/plot2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+The distribution of sugar ratings is right-skewed, with most recipes concentrated at lower values and a smaller number extending into much higher ranges.
+
+This suggests that higher sugar ratings are less common but may still represent a distinct subset of recipes that could influence overall trends or user preferences.
+
+### Bivariate Analysis
+#### Plot 3: Sugar vs Rating
+<iframe
+  src="assets/plot3.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+The boxplot illustrates how average recipe ratings are distributed across different sugar levels. Median ratings are fairly consistent across all categories, generally clustering between 4.5 and 5.0. While higher sugar groups show a slightly tighter concentration of high ratings, there is substantial overlap in the interquartile ranges across all bins. Lower-rated outliers are present in every category, indicating variability regardless of sugar content. Overall, this suggests that sugar level alone does not strongly differentiate recipe ratings, and other factors likely play a more significant role in determining user satisfaction.
+
+#### Plot 4: Preparation Time vs Rating
+<iframe
+  src="assets/plot4.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+The scatter plot illustrates the relationship between sugar content and average recipe rating. The points are widely dispersed across the chart, and although there is a slight upward tendency, it is very minimal. This suggests a **weak positive relationship**, meaning recipes with more sugar might receive slightly higher ratings on average. However, because the points are not tightly clustered around a clear line, the association is **not strong or consistent**, indicating that sugar content is not a major factor influencing recipe ratings.
+
+### Aggregation Table
+             mean  count
+sugar_bin               
+Low          4.63  19827
+Medium-Low   4.63  18269
+Medium-High  4.62  18705
+High         4.63  18646
+
+The average ratings across sugar content categories are nearly identical.
+This suggests that sugar content does not strongly influence how users rate recipes.
 
 ## Assessment of Missingness
+### Missing Not at Random (MNAR) Analysis
 
+The `description` column is likely **Missing Not at Random (MNAR)**. The presence of a description appears to depend on unobserved factors related to the recipe or the contributor, rather than solely on variables available in the dataset.
+
+Recipe descriptions are typically written manually, so whether a description is included may depend on factors such as the effort a contributor is willing to invest, their perception of the recipe’s importance, or how detailed they want their submission to be. For example, more complex or unique recipes may be more likely to include descriptions, while simpler recipes may not.
+
+Because these influencing factors are not directly observed in the dataset, the missingness of `description` depends on unobserved variables, which is characteristic of **MNAR**.
+
+Additional data—such as contributor activity levels, submission history, or engagement metrics—could help explain this missingness. If such variables account for the missingness, the mechanism could instead be considered Missing At Random (MAR).
+
+---
+
+### Missingness Dependency
+
+The dependency of `description` missingness on other variables was evaluated using permutation tests.
+
+#### Dependency on Number of Steps (`n_steps`)
+
+- **Null Hypothesis (H₀):** Missingness of `description` does not depend on `n_steps`  
+- **Alternative Hypothesis (H₁):** Missingness of `description` does depend on `n_steps`  
+- **Test Statistic:** Difference in mean `n_steps` between recipes with and without descriptions  
+
+The resulting p-value is approximately **0.041**, which is below the 0.05 significance level. Therefore, the null hypothesis is rejected.
+
+This indicates that the missingness of `description` **depends on `n_steps`**. Recipes with missing descriptions have a different average number of steps compared to those with descriptions, suggesting that recipe complexity is associated with whether a description is provided.
+
+<iframe src="assets/plot5.html" width="100%" height="400" frameborder="0"></iframe>
+
+---
+
+#### Independence from Calories (`calories`)
+
+- **Null Hypothesis (H₀):** Missingness of `description` does not depend on `calories`  
+- **Alternative Hypothesis (H₁):** Missingness of `description` does depend on `calories`  
+- **Test Statistic:** Difference in mean calories between recipes with and without descriptions  
+
+The resulting p-value is approximately **0.143**, which is greater than 0.05. Therefore, the null hypothesis is not rejected.
+
+This suggests that the missingness of `description` **does not depend on `calories`**, indicating independence with respect to this variable.
+
+<iframe src="assets/plot6.html" width="100%" height="400" frameborder="0"></iframe>
+
+---
+
+### Summary
+
+The missingness of the `description` column exhibits mixed behavior:
+
+- It **depends on `n_steps`**, indicating a relationship with an observed variable  
+- It **does not depend on `calories`**  
+- It remains plausibly **MNAR overall**, as unobserved factors likely influence whether descriptions are included  
+
+This suggests that while some aspects of missingness may be explained by observed variables, unobserved factors still play an important role.
 
 ## Hypothesis Testing
+### Hypotheses
+
+- **Null Hypothesis (H₀):** There is no association between sugar content and average recipe rating. Any observed relationship is due to random chance.  
+- **Alternative Hypothesis (H₁):** Recipes with higher sugar content tend to receive higher ratings (positive association).  
+
+---
+
+### Test Statistic
+
+The test statistic used is the **difference in mean average ratings** between recipes with **high sugar content** and those with **low sugar content** (High − Low).
+
+---
+
+### Significance Level
+
+A significance level of **α = 0.05** is used.
+
+---
+
+### Method
+
+A permutation test is conducted by randomly shuffling the `sugar_bin` labels across recipes many times (10,000 iterations) and recalculating the difference in mean ratings for each shuffle. This generates a null distribution of the test statistic under the assumption that there is no relationship between sugar content and ratings.
+
+---
+
+### Results
+
+The observed difference in mean ratings between high-sugar and low-sugar recipes is approximately **−0.0021**, indicating that high-sugar recipes received slightly lower ratings on average.
+
+The permutation test produces a p-value of approximately **0.6255**, which is substantially greater than the significance level of 0.05.
+
+Therefore, the null hypothesis is **not rejected**.
+
+---
+
+### Visualization
+
+<iframe src="assets/plot5.html" width="100%" height="400" frameborder="0"></iframe>
+
+---
+
+### Conclusion
+
+There is no statistically significant evidence of a relationship between sugar content and average recipe rating.
+
+Although sugar is often associated with taste preference, this analysis does not support the claim that recipes with higher sugar content receive higher ratings. The small observed difference is likely due to random variation rather than a true underlying effect.
+
+This suggests that other factors—such as preparation method, ingredients, or cuisine type—may play a more important role in determining recipe ratings.
 
 ## Framing a Prediction Problem
 
